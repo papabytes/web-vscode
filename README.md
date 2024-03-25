@@ -57,7 +57,7 @@ If you must do the Unsecure mode approach at least attempt to:
 ### Script
 
 ```shell
-curl -O https://raw.githubusercontent.com/papabytes/web-vscode/main/examples/setup.sh
+curl -O https://raw.githubusercontent.com/papabytes/web-vscode/main/setup.sh
 chmod +x setup.sh
 export VPN_MODE=y/n
 export SECURE_MODE=y/n
@@ -66,7 +66,14 @@ export SMTP_MAIL_DOMAIN=FILL_ME
 export SMTP_SERVER_PORT=FILL_ME
 export SMTP_AUTH_USER=FILL_ME
 export SMTP_AUTH_PASS=FILL_ME
-sudo -E ./setup.sh
+./setup.sh
+unset VPN_MODE
+unset SECURE_MODE
+unset SMTP_SERVER
+unset SMTP_MAIL_DOMAIN
+unset SMTP_SERVER_PORT
+unset SMTP_AUTH_USER
+unset SMTP_AUTH_PASS
 ```
 
 ### Environment variables

@@ -30,7 +30,8 @@ send_email() {
 
     New token is: $token
     " > mail.txt
-    ssmtp -v your_email@example.com < mail.txt
+    mailSend=$(/usr/sbin/ssmtp -v your_email@example.com < mail.txt)
+    echo "email sent"
 }
 
 token=$(getToken $MINUTES)

@@ -6,25 +6,26 @@
 
 setupSecretRotationNotifier() {
     installDir="/opt/secret-rotation-notifier"
-    apt update && apt-get install ssmtp -y
-    mkdir -p $installDir
-    chown -R $USER $installDir
-
+    sudo apt update && sudo apt-get install ssmtp -y
+    sudo mkdir -p $installDir
+    sudo chown -R $USER $installDir        
+    
     cd $installDir
-    curl -o run.sh https://raw.githubusercontent.com/papabytes/web-vscode/main/examples/secret-rotation-notifier.sh
+    
+    echo "Installing Secret Rotation Notifier Script"
+    curl -o run.sh https://raw.githubusercontent.com/papabytes/web-vscode/main/secret-rotation-notifier.sh
+    sed -i s/REPLACE_ME/$SMTP_AUTH_USER/g run.sh 
     chmod +x run.sh
 
     # Creating SSMTP configuration - using GMAIL as example you can select a different one.
-    echo "
-    root=postmaster
-    hostname=$SMTP_MAIL_DOMAIN
-    UseTLS=YES
-    mailhub=$SMTP_SERVER:$SMTP_SERVER_PORT
-    AuthUser=$SMTP_AUTH_USER
-    AuthPass=$SMTP_AUTH_PASS
-    UseSTARTTLS=YES
-    FromLineOverride=YES
-    " > /etc/ssmtp/ssmtp.conf
+    sudo echo "root=postmaster
+hostname=$SMTP_MAIL_DOMAIN
+UseTLS=YES
+mailhub=$SMTP_SERVER:$SMTP_SERVER_PORT
+AuthUser=$SMTP_AUTH_USER
+AuthPass=$SMTP_AUTH_PASS
+UseSTARTTLS=YES
+FromLineOverride=YES" > /etc/ssmtp/ssmtp.conf
 
     # hourly run
     CRON_ENTRY="0 * * * * /opt/secret-rotation-notifier/run.sh 61"
@@ -40,20 +41,25 @@ setupSecretRotationNotifier() {
 }
 
 setupOpenVPN() {
-    mkdir -p /opt/openvpn && chown -R $USER /opt/openvpn/
+    echo "Creating OpenVPN Installation Directory"
+    createDir=$(sudo mkdir -p /opt/openvpn && sudo chown -R $USER /opt/openvpn/)
     cd /opt/openvpn
-    curl -O https://raw.githubusercontent.com/angristan/openvpn-install/master/openvpn-install.sh
-    chmod +x openvpn-install.sh
+
+    echo "Downloading OpenVPN Install script to /opt/openvpn"
+    download=$(sudo curl -O https://raw.githubusercontent.com/angristan/openvpn-install/master/openvpn-install.sh && sudo chmod +x openvpn-install.sh)
+
     export AUTO_INSTALL=y
-    ./openvpn-install.sh
+
+    echo "Installing OpenVPN"
+    vpnInstallOut=$(sudo -E ./openvpn-install.sh)
 }
 
 setupVsCodeWeb() {
-    mkdir -p /opt/vscode-web
-    chown $USER -R /opt/vscode-web
-
+    sudo mkdir -p /opt/vscode-web 
     cd /opt/vscode-web
-    curl -O https://raw.githubusercontent.com/papabytes/web-vscode/main/Dockerfile
+
+    echo "Downloading VsCode Web"
+    downloadDockerfile=$(sudo curl -O https://raw.githubusercontent.com/papabytes/web-vscode/main/Dockerfile)
     composeFileNamePrefix="docker-compose"
     
     if [ "$SECURE_MODE" == "y" ]
@@ -63,12 +69,16 @@ setupVsCodeWeb() {
         composeFileNamePrefix="${composeFileNamePrefix}.unsecure.yaml"
     fi
     
-    curl -o docker-compose.yaml https://raw.githubusercontent.com/papabytes/web-vscode/main/examples/$composeFileNamePrefix   
-    
-    docker compose up -d
+    echo "Downloading Docker Compose File $composeFileNamePrefix"
+    sudo curl -o docker-compose.yaml https://raw.githubusercontent.com/papabytes/web-vscode/main/$composeFileNamePrefix   
+   
+    sudo chown $USER -R /opt/vscode-web
+
+    echo "Building Docker image"
+    build=$(docker compose up -d --build)
 }
 
-
+echo "Installing VSCode Web"
 if [[ "$SECURE_MODE"  == "y" ]]
 then
     if [[ -z $SMTP_AUTH_USER ]]; then
@@ -107,3 +117,5 @@ then
 fi
 
 setupVsCodeWeb
+
+echo "Finished."
