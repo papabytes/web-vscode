@@ -66,7 +66,7 @@ export SMTP_MAIL_DOMAIN=FILL_ME
 export SMTP_SERVER_PORT=FILL_ME
 export SMTP_AUTH_USER=FILL_ME
 export SMTP_AUTH_PASS=FILL_ME
-sudo ./setup.sh
+sudo -E ./setup.sh
 ```
 
 ### Environment variables

@@ -1,4 +1,4 @@
-FROM gitpod/openvscode-server:latest as base
+FROM gitpod/openvscode-server:1.87.1 as base
 
 # whether to configure golang or not
 ARG NODE_MAJOR=20
