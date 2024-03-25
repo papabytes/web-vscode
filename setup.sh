@@ -112,10 +112,14 @@ fi
 
 if [[ "$VPN_MODE"  == "y" ]]
 then
-
     setupOpenVPN
 fi
 
 setupVsCodeWeb
+if [[ "$SECURE_MODE"  == "y" ]]
+then
+    echo sleeping for 10 seconds
+    /opt/secret-rotation-notifier/run.sh 61
+fi
 
 echo "Finished."

@@ -32,11 +32,8 @@ send_email() {
     " > mail.txt
     mailSend=$(/usr/sbin/ssmtp -v REPLACE_ME < mail.txt)
     echo "email sent"
+    rm mail.txt
 }
 
 token=$(getToken $MINUTES)
 send_email $token
-
-
-
-
