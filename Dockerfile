@@ -24,9 +24,6 @@ RUN npm install -g @angular/cli
 # .NET SECTION
 RUN sudo apt install dotnet-sdk-8.0 -y
 
-#USER root # to get permissions to install packages and such
-#RUN # the installation process for software needed
-
 FROM base as secure
 ENTRYPOINT [ "/bin/sh", "-c", "exec /home/.openvscode-server/bin/openvscode-server --host 0.0.0.0" ]
 

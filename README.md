@@ -8,17 +8,17 @@ Moreso, what if I'm a programming addict and find myself in a remote place with 
 
 I only came accoress the OpenVsCode Server project recently and it simply fulfilled this need, and I just had to think on how to properly configure it for my needs and how to host it.
 
-## Configuring
+## Configuring VSCode Web
 The base Dockerfile already contains sections that configure GoLang, .NET, NodeJS (and Angular) and, as long as you know how to install your favorite SDKs, it should be fairly easy to tag along and customise it to your needs.
 
-## Data Persistence
+### Data Persistence
 From the docker compose you can see that the only directory being mapped is
 >  volumes:  
         - ./workspace:/home/workspace:cached
 
 The left hand side of the volume mount should represent the directory on the host where you will want to host the VSCode extensions configurations and the projects you want it to access.
 
-## Running
+## Running locally
 To ease the startup process you can use **docker compose** to start the application, by running one of the following commands, depending on the docker compose version you have installed:
 
 * Docker Compose V2:
@@ -50,8 +50,35 @@ There are multiple ways to tackle this issue and I will leave some on the table 
 Never, and I mean NEVER use the unsecure mode over the internet, unless you acknowledge the risks involved. Your code base may be tampered with, stolen, etc.
 
 If you must do the Unsecure mode approach at least attempt to:
-* Unsecure Mode + VPN
-    Same as Secure Mode + VPN without the secret rotation on application restart
+* Unsecure Mode + VPN  
+    > Same as Secure Mode + VPN without the secret rotation on application restart
+
+## Debian Server Setup
+### Script
+
+```shell
+curl -O https://raw.githubusercontent.com/papabytes/web-vscode/main/examples/setup.sh
+chmod +x setup.sh
+export VPN_MODE=y/n
+export SECURE_MODE=y/n
+export SMTP_SERVER=FILL_ME
+export SMTP_MAIL_DOMAIN=FILL_ME
+export SMTP_SERVER_PORT=FILL_ME
+export SMTP_AUTH_USER=FILL_ME
+export SMTP_AUTH_PASS=FILL_ME
+sudo ./setup.sh
+```
+
+### Environment variables
+|Name|Required|Value|Effect|
+|----|--------|-------|--|
+|VPN_MODE|❌|y/n|Installs OpenVPN server and creates a client
+|SECURE_MODE|❌|y/n|Applies the Secure Mode and registers a Cron Job that sends you an email everytime the value is updated.
+|SMTP_SERVER|✅ - if SECURE_MODE is y|smtp.gmail.com|Configures SMTP Server for CronJob|
+|SMTP_MAIL_DOMAIN|✅ - if SECURE_MODE is y|gmail.com|Configures SMTP Domain for CronJob|
+|SMTP_SERVER_PORT|✅ - if SECURE_MODE is y|587|Configures SMTP Server Port for CronJob|
+|SMTP_AUTH_USER|✅ - if SECURE_MODE is y|youremail@gmail.com|Configures SMTP Sender email for CronJob|
+|SMTP_AUTH_PASS|✅ - if SECURE_MODE is y|your-smtp-secret|Configures SMTP Sender Password for CronJob|
 
 ## Related links
 * [OpenVSCode Server Github](https://github.com/gitpod-io/openvscode-server)
