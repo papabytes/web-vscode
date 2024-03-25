@@ -10,6 +10,7 @@ USER root
 RUN wget https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz
 RUN sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz
 RUN echo "export PATH=$PATH:/usr/local/go/bin" > /home/workspace/.profile 
+RUN echo "export PATH=$PATH:/usr/local/go/bin" >> /etc/profile
 RUN rm go${GO_VERSION}.linux-amd64.tar.gz
 
 # # NODEJS Section
