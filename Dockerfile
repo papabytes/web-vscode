@@ -7,12 +7,12 @@ ARG GO_VERSION=1.22.1
 USER root
 
 # GOLANG Section
-RUN wget https://go.dev/dl/go$GO_VERSION.linux-amd64.tar.gz
-RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go$GO_VERSION.linux-amd64.tar.gz
-RUN rm go$GO_VERSION.linux-amd64.tar.gz
-RUN echo "export PATH=$PATH:/usr/local/go/bin" > $HOME/.profile 
+RUN wget https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz
+RUN sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz
+RUN echo "export PATH=$PATH:/usr/local/go/bin" > /home/workspace/.profile 
+RUN rm go${GO_VERSION}.linux-amd64.tar.gz
 
-# NODEJS Section
+# # NODEJS Section
 RUN sudo apt-get update && sudo apt-get install -y ca-certificates curl gnupg
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
