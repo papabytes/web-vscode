@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  vscode_web:
+    build: 
+      args:
+        - NODE_MAJOR=20
+        - GO_VERSION=1.22.1
+      context: .
+      dockerfile: ./Dockerfile
+      target: secure
+    container_name: vscode_web
+    restart: always
+    ports:
+      - "3000:3000/tcp"
+      - "8080:8080/tcp"
+      - "4200:4200/tcp"
+    volumes:
+      - ./workspace:/home/workspace:cached
+    

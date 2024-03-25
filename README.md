@@ -45,8 +45,6 @@ There are multiple ways to tackle this issue and I will leave some on the table 
 > If you use the secure target approach, as long as the token is not compromised (which will only be possible if you have a valid SSL connection between your machine and the hosting service), you should be ok. You could go an extra mile and configure the Server's firewall to only accept incoming traffic to the UI's port from a well defined range of IPs that you and only you own.
 * Secure Mode + VPN
 > If you install a VPN server solution on the target server or within its network you could configure the VPN client on your devices and simply access the URL when you are connected to the VPN. This limits the attack possibilities as the URL is not public and you also require VPN credentials to have connectivity towards it.
-* Secure Mode + Reverse Proxy 
-> If you cannot go for a VPN approach you can configure a reverse proxy to serve VSCode WEB to you and add an extra layer of security by Ensuring something like Basic Auth authentication. Also make sure that you serve your application with a valid domain and certificate to ensure encryption on the client-server communication. I recon that knowing what the token is can be hard if you cannot SSH into the server and inspect the console logs of the docker container. For this I'd recommend to install a service that watches these logs and looks for the token line and notifies you of the most current token. The notificatio channel could be one of many things of your taste. I personally recommend an integration with a password vault as Bitwarden, via bitwarden cli. This way the server keeps that secret updated when it rotates and you can always get the latest value from your device.
 
 ### Unsecure mode
 Never, and I mean NEVER use the unsecure mode over the internet, unless you acknowledge the risks involved. Your code base may be tampered with, stolen, etc.
@@ -54,10 +52,7 @@ Never, and I mean NEVER use the unsecure mode over the internet, unless you ackn
 If you must do the Unsecure mode approach at least attempt to:
 * Unsecure Mode + VPN
     Same as Secure Mode + VPN without the secret rotation on application restart
-* Unsecure Mode + Reverse Proxy 
-    Same as SecureMode + Reverse Proxy without the secret rotation approach
-
-
 
 ## Related links
 * [OpenVSCode Server Github](https://github.com/gitpod-io/openvscode-server)
+* [OpenVPN Install @angristan](https://github.com/angristan/openvpn-install)

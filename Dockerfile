@@ -1,7 +1,6 @@
 FROM gitpod/openvscode-server:latest as base
 
 # whether to configure golang or not
-ARG CONFIG_GO=0
 ARG NODE_MAJOR=20
 ARG GO_VERSION=1.22.1
 
