@@ -30,7 +30,7 @@ send_email() {
 
     New token is: $token
     " > mail.txt
-    mailSend=$(/usr/sbin/ssmtp -v your_email@example.com < mail.txt)
+    mailSend=$(/usr/sbin/ssmtp -v REPLACE_ME < mail.txt)
     echo "email sent"
 }
 
